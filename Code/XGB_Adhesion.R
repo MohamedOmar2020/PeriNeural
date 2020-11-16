@@ -31,7 +31,8 @@ load("./Objs/PeriNeuralData.rda")
 
 ############################################################################
 ## Load the selected genes *(TF-MiR from Lotte)
-TF_MiR <- load("/Volumes/Macintosh/Dropbox (MechPred)/MechPred/USER/Mohamed/MechanisticModels/Genes/allTSPs.rda")
+AdhesionGns <- read.delim("/Volumes/Macintosh/MechPred/MechPred/USER/Mohamed/MechanisticModels/Genes/GO_Adhesion.txt")
+AdhesionGns <- AdhesionGns$GO_BIOLOGICAL_ADHESION
 
 ### Quantile normalize
 usedTrainMat <- normalizeBetweenArrays(mixTrainMat, method = "quantile")
@@ -43,7 +44,7 @@ usedTrainGroup <- mixTrainGroup
 usedTestGroup <- mixTestGroup
 
 ### Common genes
-keepGns <- intersect(as.vector(myTSPs), rownames(usedTrainMat))
+keepGns <- intersect(as.vector(AdhesionGns), rownames(usedTrainMat))
 usedTrainMat <- usedTrainMat[keepGns, ]
 usedTestMat <- usedTestMat[keepGns, ]
 
@@ -198,17 +199,17 @@ parameters <- list(
   # Booster Parameters
   eta                = 0.1,           #0.1    # default = 0.3, range: [0,1]
   gamma              = 0,             #1   # default = 0,   range: [0,∞]
-  max_depth          = 1,             # 1
+  max_depth          = 2,             # 1
   min_child_weight   = 1,             #1    # default = 1,   range: [0,∞]
   subsample          = 0.4,           # 0.4      # default = 1,   range: (0,1]
   colsample_bytree   = 1,                 # default = 1,   range: (0,1]
   colsample_bylevel  = 1,                 # default = 1,   range: (0,1]
-  lambda             = 0,             # 0   # default = 1
+  lambda             = 1,             # 0   # default = 1
   alpha              = 0,           # 0    # default = 0
   # Task Parameters
   objective          = "binary:logistic",   # default = "reg:linear"
   eval_metric        = "auc"
-  )
+)
 
 ## Make the final model  1411  507
 xgb.model <- xgb.train(parameters, DataTrain, nrounds = 500, watchlist,  early_stopping_rounds = 50, scale_pos_weight = No/Yes)

@@ -61,7 +61,7 @@ ktspStatsTrainRes <- SWAP.KTSP.Statistics(inputMat = usedTrainMat, classifier = 
 summary(ktspStatsTrainRes$statistics)
 
 ### Threshold
-thr <- coords(roc(usedTrainGroup, ktspStatsTrainRes$statistics, levels = c("No", "Yes"), ), "best")["threshold"]
+thr <- coords(roc(usedTrainGroup, ktspStatsTrainRes$statistics, levels = c("No", "Yes")), "best")["threshold"]
 thr
 
 ### Print ROC curve local maximas
@@ -69,9 +69,9 @@ coords(roc(usedTrainGroup, ktspStatsTrainRes$statistics, levels = c("No", "Yes")
 
 ### Plot Curve: note that you must reorder the levels!!!
 ### ("good" goes first, "bad" goes second, the opposite of confusionMatrix)
-bitmap("./Figs/TF_MiR/mechanistic_trainROC.png", width = 7.5, height = 7.5, res = 400)
-roc(usedTrainGroup, ktspStatsTrainRes$statistics, plot = TRUE, print.thres=thr, print.thres.adj=c(0.01,1.25), print.auc=TRUE, print.auc.col="black", levels = c("No", "Yes"), col="blue", lwd=2, grid=TRUE, main="Mechanistic KTSP performance in the training data")
-dev.off()
+#bitmap("./Figs/TF_MiR/mechanistic_trainROC.png", width = 7.5, height = 7.5, res = 400)
+roc(usedTrainGroup, ktspStatsTrainRes$statistics, plot = TRUE, print.thres=thr, print.auc=TRUE, print.auc.col="black", levels = c("No", "Yes"), col="blue", lwd=2, grid=TRUE, main="Mechanistic KTSP performance in the training data")
+#dev.off()
 
 ### Get predictions based on best threshold from ROC curve
 usedTrainPredictionRes <- SWAP.KTSP.Classify(usedTrainMat, ktspPredictorRes, DecisionFunc = function(x) sum(x) > thr)
@@ -89,19 +89,19 @@ ktspStatsTestRes <- SWAP.KTSP.Statistics(inputMat = usedTestMat, classifier = kt
 summary(ktspStatsTestRes$statistics)
 
 ## Threshold
-thr_test <- coords(roc(usedTestGroup, ktspStatsTestRes$statistics, levels = c("No", "Yes"),),"best")["threshold"]
-thr_test
+#thr_test <- coords(roc(usedTestGroup, ktspStatsTestRes$statistics, levels = c("No", "Yes"),),"best")["threshold"]
+#thr_test
 
 ## Print ROC curve local maximas
-coords(roc(usedTestGroup, ktspStatsTestRes$statistics, levels = c("No", "Yes"),),"local maximas")
+#coords(roc(usedTestGroup, ktspStatsTestRes$statistics, levels = c("No", "Yes"),),"local maximas")
 
 ## Plot curve
-bitmap("./Figs/TF_MiR/mechanistic_testROC_TF_MiRgenes.png", width = 7.5, height = 7.5, res = 400)
-roc(usedTestGroup, ktspStatsTestRes$statistics, plot = TRUE, print.thres=thr_test, print.auc=TRUE, print.auc.col="black", levels = c("No", "Yes"), col="blue", lwd=2, grid=TRUE, main= "Mechanistic KTSP using TF_MiR Gns")
-dev.off()
+#bitmap("./Figs/TF_MiR/mechanistic_testROC_TF_MiRgenes.png", width = 7.5, height = 7.5, res = 400)
+roc(usedTestGroup, ktspStatsTestRes$statistics, plot = F, print.auc=TRUE, print.auc.col="black", levels = c("No", "Yes"), col="blue", lwd=2, grid=TRUE)
+#dev.off()
 
 ### Get predictions based on best threshold from ROC curve
-usedTestPredictionRes <- SWAP.KTSP.Classify(usedTestMat, ktspPredictorRes, DecisionFunc = function(x) sum(x) > thr_test)
+usedTestPredictionRes <- SWAP.KTSP.Classify(usedTestMat, ktspPredictorRes, DecisionFunc = function(x) sum(x) > thr)
 
 ### Resubstitution performance in the Test set
 confusionMatrix(usedTestPredictionRes, usedTestGroup, positive = "Yes")
