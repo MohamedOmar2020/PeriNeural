@@ -6,7 +6,7 @@
 
 rm(list = ls())
 
-setwd("/Users/mohamedomar/Documents/Research/Projects/PeriNeural")
+#setwd("/Users/mohamedomar/Documents/Research/Projects/PeriNeural")
 
 
 ############################################################################
@@ -59,11 +59,11 @@ expr2 <- Dataset2$expr
 expr3 <- Dataset3$expr
 expr4 <- Dataset4$expr
 # expr5 (HNSCC)
-expr5 <- read.delim("/Users/mohamedomar/Desktop/Research/hnsc_tcga/data_RNA_Seq_v2_expression_median.txt")
+expr5 <- read.delim("/Volumes/Macintosh/Research/Projects/PeriNeural/Data/hnsc_tcga/data_RNA_Seq_v2_expression_median.txt")
 # expr6 (CholangioCarcinoma)
-expr6 <- read.delim("/Users/mohamedomar/Desktop/Research/chol_tcga/data_RNA_Seq_v2_expression_median.txt")
+expr6 <- read.delim("/Volumes/Macintosh/Research/Projects/PeriNeural/Data/chol_tcga/data_RNA_Seq_v2_expression_median.txt")
 # expr7 (Colon)
-expr7 <- read.delim("/Users/mohamedomar/Desktop/Research/coadread_tcga/data_RNA_Seq_v2_expression_median.txt")
+expr7 <- read.delim("/Volumes/Macintosh/Research/Projects/PeriNeural/Data/coadread_tcga/data_RNA_Seq_v2_expression_median.txt")
 
 
 ## Check if expressions are normalized and log-scaled
@@ -77,9 +77,9 @@ expr7 <- read.delim("/Users/mohamedomar/Desktop/Research/coadread_tcga/data_RNA_
 Pheno2 <- Dataset2$pheno
 Pheno3 <- Dataset3$pheno
 Pheno4 <- Dataset4$pheno
-Pheno5 <- read.delim("/Users/mohamedomar/Desktop/Research/hnsc_tcga_clinical_data.tsv")
-Pheno6 <- read.delim("/Users/mohamedomar/Desktop/Research/chol_tcga_clinical_data.tsv")
-Pheno7 <- read.delim("/Users/mohamedomar/Desktop/Research/coadread_tcga_clinical_data.tsv")
+Pheno5 <- read.delim("/Volumes/Macintosh/Research/Projects/PeriNeural/Data/hnsc_tcga/hnsc_tcga_clinical_data.tsv")
+Pheno6 <- read.delim("/Volumes/Macintosh/Research/Projects/PeriNeural/Data/chol_tcga/chol_tcga_clinical_data.tsv")
+Pheno7 <- read.delim("/Volumes/Macintosh/Research/Projects/PeriNeural/Data/coadread_tcga/coadread_tcga_clinical_data.tsv")
 
 ## Annotation
 
@@ -102,7 +102,7 @@ filt2 <- genefilter(2^X2, ffun)
 expr2 <- expr2[filt2, ]
 dim(expr2)
 
-expr2 <- znorm(expr2)
+expr2 <- t(scale(t(expr2), center = T, scale = T))
 #####################
 
 # expr3
@@ -117,6 +117,7 @@ sel <- which(apply(expr3, 1, function(x) all(is.finite(x)) ))
 expr3 <- expr3[sel, ]
 
 dim(expr3)
+# ALready scaled and centered
 #########################
 
 # expr4
@@ -136,7 +137,7 @@ X4 <- expr4
 filt4 <- genefilter(2^X4, ffun)
 expr4 <- expr4[filt4, ]
 
-expr4 <- znorm(expr4)
+expr4 <- t(scale(t(expr4), center = T, scale = T))
 
 # expr5
 expr5 <- expr5[!duplicated(expr5$Hugo_Symbol), ]
@@ -165,7 +166,7 @@ dim(expr5)
 
 expr5 <- log2(expr5 + 1)
 #boxplot(expr5)
-expr5 <- znorm(expr5)
+expr5 <- t(scale(t(expr5), center = T, scale = T))
 
 # expr6
 expr6 <- expr6[!duplicated(expr6$Hugo_Symbol), ]
@@ -192,7 +193,7 @@ dim(expr6)
 
 expr6 <- log2(expr6 + 1)
 #boxplot(expr6)
-expr6 <- znorm(expr6)
+expr6 <- t(scale(t(expr6), center = T, scale = T))
 
 # expr7
 expr7 <- expr7[!duplicated(expr7$Hugo_Symbol), ]
@@ -219,7 +220,7 @@ dim(expr7)
 
 expr7 <- log2(expr7 + 1)
 #boxplot(expr7)
-expr7 <- znorm(expr7)
+expr7 <- t(scale(t(expr7), center = T, scale = T))
 #############################
 
 ## Modify Pheno 2
@@ -322,8 +323,6 @@ exprsMetastasis <- mapply(x=AllExpr, FUN=function(x, gns) {
 }, MoreArgs=list(gns=commonGenes))
 
 ##########
-
-
 
 # Train <- c("GSE103479", "GSE7055", "chol_tcga","hnsc_tcga")
 # Test <- c("coadread_tcga")
@@ -489,7 +488,7 @@ covs <- sapply(covs , function(x) as.numeric(factor(paste(x))))
 set.seed(333)
 trainingOrTesting <- balancedstratification(
   covs[ , , drop=FALSE], strata=1*(Group_Perineural == "Yes"),
-  pik=inclusionprobabilities(1:nrow(covs), nrow(covs)/3),
+  pik=inclusionprobabilities(1:nrow(covs), nrow(covs) * 0.3),
   comment=TRUE, method=1)
 
 ### Show
