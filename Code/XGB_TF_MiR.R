@@ -196,14 +196,14 @@ parameters <- list(
   booster            = "gbtree",          # default = "gbtree"
   silent             = 1,                 # default = 0
   # Booster Parameters
-  eta                = 0.1,           #0.1    # default = 0.3, range: [0,1]
+  eta                = 0.01,           #0.01    # default = 0.3, range: [0,1]
   gamma              = 0,             #1   # default = 0,   range: [0,∞]
   max_depth          = 1,             # 1
   min_child_weight   = 1,             #1    # default = 1,   range: [0,∞]
   subsample          = 0.4,           # 0.4      # default = 1,   range: (0,1]
   colsample_bytree   = 1,                 # default = 1,   range: (0,1]
   colsample_bylevel  = 1,                 # default = 1,   range: (0,1]
-  lambda             = 0,             # 0   # default = 1
+  lambda             = 2,             # 2   # default = 1
   alpha              = 0,           # 0    # default = 0
   # Task Parameters
   objective          = "binary:logistic",   # default = "reg:linear"

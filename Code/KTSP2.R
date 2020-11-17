@@ -46,14 +46,15 @@ ktsp <- c(1:25)
 
 ### Train a classifier using default filtering function based on Wilcoxon
 ktspPredictorRes <- SWAP.Train.KTSP(
-  usedTrainMat, usedTrainGroup, krange=ktsp,
-  FilterFunc = SWAP.Filter.Wilcoxon, featureNo = 500)
+  usedTrainMat, usedTrainGroup, krange=6,
+  FilterFunc = SWAP.Filter.Wilcoxon, featureNo = 100)
+
 ktspPredictorRes
 
 ### Check how many TSP
-xx <- SWAP.Filter.Wilcoxon(usedTrainGroup,usedTrainMat,featureNo=featN)
-dim(myTSPs[myTSPs[,1] %in% xx & myTSPs[,2] %in% xx ,])
-choose(78,2)
+#xx <- SWAP.Filter.Wilcoxon(usedTrainGroup,usedTrainMat,featureNo=featN)
+#dim(myTSPs[myTSPs[,1] %in% xx & myTSPs[,2] %in% xx ,])
+#choose(78,2)
 
 ############################################################################
 ### Compute the sum and find the best threshold: All training samples
@@ -70,7 +71,7 @@ coords(roc(usedTrainGroup, ktspStatsTrainRes$statistics, levels = c("No", "Yes")
 ### Plot Curve: note that you must reorder the levels!!!
 ### ("good" goes first, "bad" goes second, the opposite of confusionMatrix)
 #bitmap("./Figs/TF_MiR/mechanistic_trainROC.png", width = 7.5, height = 7.5, res = 400)
-roc(usedTrainGroup, ktspStatsTrainRes$statistics, plot = TRUE, print.thres=thr, print.auc=TRUE, print.auc.col="black", levels = c("No", "Yes"), col="blue", lwd=2, grid=TRUE, main="Mechanistic KTSP performance in the training data")
+roc(usedTrainGroup, ktspStatsTrainRes$statistics, plot = F, print.thres=thr, print.auc=TRUE, print.auc.col="black", levels = c("No", "Yes"), col="blue", lwd=2, grid=TRUE, main="Mechanistic KTSP performance in the training data")
 #dev.off()
 
 ### Get predictions based on best threshold from ROC curve

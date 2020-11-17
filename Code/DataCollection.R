@@ -97,12 +97,12 @@ dim(expr2)
 
 
 X2 <- expr2
-ffun <- filterfun(pOverA(p = 0.8, A = 100))
+ffun <- filterfun(pOverA(p = 0.5, A = 100))
 filt2 <- genefilter(2^X2, ffun)
 expr2 <- expr2[filt2, ]
 dim(expr2)
 
-expr2 <- t(scale(t(expr2), center = T, scale = T))
+#expr2 <- t(scale(t(expr2), center = T, scale = T))
 #####################
 
 # expr3
@@ -137,7 +137,7 @@ X4 <- expr4
 filt4 <- genefilter(2^X4, ffun)
 expr4 <- expr4[filt4, ]
 
-expr4 <- t(scale(t(expr4), center = T, scale = T))
+#expr4 <- t(scale(t(expr4), center = T, scale = T))
 
 # expr5
 expr5 <- expr5[!duplicated(expr5$Hugo_Symbol), ]
@@ -158,15 +158,14 @@ expr5 <- expr5[sel, ]
 
 # Filter expr9 to include only genes with > 1 RSEM in 50% of samples
 X <- expr5
-ffun <- filterfun(pOverA(p = 0.8, A = 1))
-
+ffun <- filterfun(pOverA(p = 0.5, A = 1))
 filt <- genefilter(X,ffun)
 expr5 <- expr5[filt,]
 dim(expr5)
 
 expr5 <- log2(expr5 + 1)
 #boxplot(expr5)
-expr5 <- t(scale(t(expr5), center = T, scale = T))
+#expr5 <- t(scale(t(expr5), center = T, scale = T))
 
 # expr6
 expr6 <- expr6[!duplicated(expr6$Hugo_Symbol), ]
@@ -193,7 +192,7 @@ dim(expr6)
 
 expr6 <- log2(expr6 + 1)
 #boxplot(expr6)
-expr6 <- t(scale(t(expr6), center = T, scale = T))
+#expr6 <- t(scale(t(expr6), center = T, scale = T))
 
 # expr7
 expr7 <- expr7[!duplicated(expr7$Hugo_Symbol), ]
@@ -217,10 +216,10 @@ X <- expr7
 filt <- genefilter(X,ffun)
 expr7 <- expr7[filt,]
 dim(expr7)
-
+# 
 expr7 <- log2(expr7 + 1)
 #boxplot(expr7)
-expr7 <- t(scale(t(expr7), center = T, scale = T))
+#expr7 <- t(scale(t(expr7), center = T, scale = T))
 #############################
 
 ## Modify Pheno 2

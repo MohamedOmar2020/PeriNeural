@@ -31,7 +31,6 @@ load("./Objs/PeriNeuralData.rda")
 
 ############################################################################
 ## Load the selected genes *(TF-MiR from Lotte)
-TF_MiR <- load("/Volumes/Macintosh/Dropbox (MechPred)/MechPred/USER/Mohamed/MechanisticModels/Genes/allTSPs.rda")
 
 ### Quantile normalize
 usedTrainMat <- normalizeBetweenArrays(mixTrainMat, method = "quantile")
@@ -41,11 +40,6 @@ usedTestMat <- normalizeBetweenArrays(mixTestMat, method = "quantile")
 ### Associated groups
 usedTrainGroup <- mixTrainGroup
 usedTestGroup <- mixTestGroup
-
-### Common genes
-keepGns <- intersect(as.vector(myTSPs), rownames(usedTrainMat))
-usedTrainMat <- usedTrainMat[keepGns, ]
-usedTestMat <- usedTestMat[keepGns, ]
 
 ### Transpose usedTrainMat (making samples as rows instead of columns)
 Training <- t(usedTrainMat)
@@ -196,7 +190,7 @@ parameters <- list(
   booster            = "gbtree",          # default = "gbtree"
   silent             = 1,                 # default = 0
   # Booster Parameters
-  eta                = 0.1,           #0.1    # default = 0.3, range: [0,1]
+  eta                = 0.01,           #0.1    # default = 0.3, range: [0,1]
   gamma              = 0,             #1   # default = 0,   range: [0,∞]
   max_depth          = 1,             # 1
   min_child_weight   = 1,             #1    # default = 1,   range: [0,∞]
